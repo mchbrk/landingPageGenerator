@@ -6,12 +6,12 @@
 		<title>Landing Page template</title>
 		<meta name="generator" content="Bootply" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link href="../SimpleLanding/css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 		<!--[if lt IE 9]>
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		<link href="../SimpleLanding/css/styles.css" rel="stylesheet">
+		<link href="/home/majki/public_html/coderslab/landingPageGenerator/templates/SimpleLanding/css/styles.css" rel="stylesheet">
 	</head>
 	<body>
 <div class="container-full">
@@ -32,9 +32,24 @@
             </div>
           </form>
         </div>
-        
+          {#<ul class="record_actions">#}
+          {#<li>#}
+              {#<a href="{{ path('simplelanding') }}">#}
+                  {#Back to the list#}
+                  {#</a>#}
+              {#</li>#}
+          {#<li>#}
+              {#<a href="{{ path('simplelanding_edit', { 'id': entity.id }) }}">#}
+                  {#Edit#}
+                  {#</a>#}
+              {#</li>#}
+          {#<li>{{ form(delete_form) }}</li>#}
+          {#</ul>#}
       </div></div>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
+
 	</body>
 </html>
+
+

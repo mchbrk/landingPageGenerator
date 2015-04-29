@@ -1,0 +1,49 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>SimpleLanding list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Templatename</th>
+                <th>Templatetitle</th>
+                <th>Templateh1</th>
+                <th>Templatelead</th>
+                <th>Templatebutton</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('simplelanding_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.templateName }}</td>
+                <td>{{ entity.templateTitle }}</td>
+                <td>{{ entity.templateH1 }}</td>
+                <td>{{ entity.templateLead }}</td>
+                <td>{{ entity.templateButton }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('simplelanding_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('simplelanding_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('simplelanding_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}
