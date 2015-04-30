@@ -136,12 +136,20 @@ class SimpleLandingController extends Controller
      */
     public function editAction($id)
     {
+
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TemplatesBundle:SimpleLanding')->find($id);
 
+        /** @var SimpleLanding $entity */
+        $entity = $em->getRepository('TemplatesBundle:SimpleLanding')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find SimpleLanding entity.');
+        }
+        $sameUser = ($this->getUser()->getId() == $entity->getUser()->getId());
+        if (false === ($sameUser))
+        {
+            throw new \Exception('not your template, owner id:' . $entity->getUser()->getId() . ', your id:'.$this->getUser()->getId()
+            . ', comparison result: ' . $sameUser);
         }
 
         $editForm = $this->createEditForm($entity);
