@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Landing\TemplatesBundle\Entity\SimpleLanding;
 use Landing\TemplatesBundle\Form\SimpleLandingType;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use ZipArchive;
 
 /**
  * SimpleLanding controller.
@@ -28,8 +31,7 @@ class SimpleLandingController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('TemplatesBundle:SimpleLanding')->findAll();
+        $entities = $em->getRepository('TemplatesBundle:SimpleLanding')->findByUser($this->getUser()->getId());
 
         return array(
             'entities' => $entities,
@@ -244,5 +246,28 @@ class SimpleLandingController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    /**
+     * Creates a new SimpleLanding entity.
+     *
+     * @Route("/download", name="simplelanding_download")
+     **/
+    public function downloadTemplateAction()
+    {
+        $entity = $this->getEntity();
+
+        $index = $this->renderView('Landing:Templates:show.html.twig');
+        $archive = new ZipArchive();
+        $archive->open($this->get('kernel')->getRootDir() . '/../web/zip/' . $entity->getHash() . '.zip', ZipArchive::CREATE);
+        $archive->addFromString($entity->getHash() . '.php', $index);
+
+        $response = new Response(file_get_contents($archive->filename));
+
+        $d = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $entity->getHash() . '.zip');
+        $response->headers->set('Content-Disposition', $d);
+
+        $archive->close();
+
+        return $response;
     }
 }

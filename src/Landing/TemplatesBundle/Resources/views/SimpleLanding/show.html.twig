@@ -1,48 +1,120 @@
-{% extends '::base.html.twig' %}
+{#{% extends '::base.html.twig' %}#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Landing Page template</title>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <style>
+        html,body {
+            height:100%;
+        }
 
-{% block body -%}
-    <h1>SimpleLanding</h1>
+        h1 {
+            font-family: Arial,sans-serif
+        font-size:80px;
+            color:#DDCCEE;
+        }
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Templatename</th>
-                <td>{{ entity.templateName }}</td>
-            </tr>
-            <tr>
-                <th>Templatetitle</th>
-                <td>{{ entity.templateTitle }}</td>
-            </tr>
-            <tr>
-                <th>Templateh1</th>
-                <td>{{ entity.templateH1 }}</td>
-            </tr>
-            <tr>
-                <th>Templatelead</th>
-                <td>{{ entity.templateLead }}</td>
-            </tr>
-            <tr>
-                <th>Templatebutton</th>
-                <td>{{ entity.templateButton }}</td>
-            </tr>
-        </tbody>
-    </table>
+        .lead {
+            color:#DDCCEE;
+        }
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('simplelanding') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('simplelanding_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+
+        /* Custom container */
+        .container-full {
+            margin: 0 auto;
+            width: 100%;
+            min-height:100%;
+            background-color:#110022;
+            color:#eee;
+            overflow:hidden;
+        }
+
+        .container-full a {
+            color:#efefef;
+            text-decoration:none;
+        }
+
+        .v-center {
+            margin-top:7%;
+        }
+    </style>
+</head>
+{% block body %}
+<body>
+<div class="container-full">
+
+    <div class="row">
+
+        <div class="col-lg-12 text-center v-center">
+
+            <h1>{{ entity.templateH1 }}</h1>
+            <p class="lead">{{ entity.templateLead }}</p>
+
+            <form class="col-lg-12">
+                <div class="input-group" style="width:340px;text-align:center;margin:0 auto;">
+                    <input class="form-control input-lg" title="Don't worry. We hate spam, and will not share your email with anyone." placeholder="Enter your email address" type="text">
+                    <span class="input-group-btn"><button class="btn btn-lg btn-primary" type="button">{{ entity.templateButton }}</button></span>
+                </div>
+            </form>
+            <a href="{{ path('simplelanding_edit', { 'id': entity.id }) }}">Edit
+            </a>
+        </div>
+    </div></div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</body>
+</html>
 {% endblock %}
+    {#<h1>SimpleLanding</h1>#}
+
+    {#<table class="record_properties">#}
+    {#<tbody>#}
+    {#<tr>#}
+    {#<th>Id</th>#}
+    {#<td>{{ entity.id }}</td>#}
+    {#</tr>#}
+    {#<tr>#}
+    {#<th>Templatename</th>#}
+    {#<td>{{ entity.templateName }}</td>#}
+    {#</tr>#}
+    {#<tr>#}
+    {#<th>Templatetitle</th>#}
+    {#<td>{{ entity.templateTitle }}</td>#}
+    {#</tr>#}
+    {#<tr>#}
+    {#<th>Templateh1</th>#}
+    {#<td>{{ entity.templateH1 }}</td>#}
+    {#</tr>#}
+    {#<tr>#}
+    {#<th>Templatelead</th>#}
+    {#<td>{{ entity.templateLead }}</td>#}
+    {#</tr>#}
+    {#<tr>#}
+    {#<th>Templatebutton</th>#}
+    {#<td>{{ entity.templateButton }}</td>#}
+    {#</tr>#}
+    {#</tbody>#}
+    {#</table>#}
+
+    {#<ul class="record_actions">#}
+    {#<li>#}
+    {#<a href="{{ path('simplelanding') }}">#}
+    {#Back to the list#}
+    {#</a>#}
+    {#</li>#}
+    {#<li>#}
+    {#<a href="{{ path('simplelanding_edit', { 'id': entity.id }) }}">#}
+    {#Edit#}
+    {#</a>#}
+    {#</li>#}
+    {#<li>{{ form(delete_form) }}</li>#}
+    {#</ul>#}

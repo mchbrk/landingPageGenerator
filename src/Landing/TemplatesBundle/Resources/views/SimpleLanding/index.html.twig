@@ -32,13 +32,15 @@
                     <li>
                         <a href="{{ path('simplelanding_edit', { 'id': entity.id }) }}">edit</a>
                     </li>
+                    <li>
+                        <a href="{{ path('simplelanding_download', { 'id': entity.id }) }}">download</a>
+                    </li>
                 </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
         <ul>
         <li>
             <a href="{{ path('simplelanding_new') }}">
