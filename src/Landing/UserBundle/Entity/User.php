@@ -14,6 +14,7 @@ class User extends BaseUser
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\OneToMany(targetEntity="SimpleLanding", mappedBy="user")
      */
     protected $id;
 

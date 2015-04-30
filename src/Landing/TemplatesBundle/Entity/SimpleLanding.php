@@ -56,6 +56,12 @@ class SimpleLanding
      */
     private $templateButton;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Landing\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+
+     private $user;
 
     /**
      * Get id
