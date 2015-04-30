@@ -187,4 +187,27 @@ class SimpleLanding
     {
         return $this->templateButton;
     }
+
+    /**
+     * Set user
+     *
+     * @param \Landing\UserBundle\Entity\User $user
+     * @return SimpleLanding
+     */
+    public function setUser(\Landing\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Landing\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

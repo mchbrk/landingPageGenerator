@@ -45,6 +45,7 @@ class SimpleLandingController extends Controller
     public function createAction(Request $request)
     {
         $entity = new SimpleLanding();
+        $entity->setUser($this->getUser());
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
