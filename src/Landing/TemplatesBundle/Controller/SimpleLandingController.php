@@ -250,20 +250,23 @@ class SimpleLandingController extends Controller
     /**
      * Creates a new SimpleLanding entity.
      *
-     * @Route("/download", name="simplelanding_download")
+     * @Route("/download/{id}", name="simplelanding_download")
      **/
-    public function downloadTemplateAction()
+    public function downloadTemplateAction($id)
     {
-        $entity = $this->getEntity();
+        $em = $this->getDoctrine()->getManager();
 
-        $index = $this->renderView('Landing:Templates:show.html.twig');
+        /** @var SimpleLanding $entity */
+        $entity = $em->getRepository('TemplatesBundle:SimpleLanding')->find($id);
+
+        $index = $this->renderView('TemplatesBundle:SimpleLanding:show.html.twig', array('entity' => $entity));
         $archive = new ZipArchive();
-        $archive->open($this->get('kernel')->getRootDir() . '/../web/zip/' . $entity->getHash() . '.zip', ZipArchive::CREATE);
-        $archive->addFromString($entity->getHash() . '.php', $index);
+        $archive->open($this->get('kernel')->getRootDir() . '/../web/zip/' . $entity->getId() . '.zip', ZipArchive::CREATE);
+        $archive->addFromString($entity->getId() . '.php', $index);
 
         $response = new Response(file_get_contents($archive->filename));
 
-        $d = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $entity->getHash() . '.zip');
+        $d = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $entity->getId() . '.zip');
         $response->headers->set('Content-Disposition', $d);
 
         $archive->close();
