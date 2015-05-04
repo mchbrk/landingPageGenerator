@@ -30,12 +30,18 @@ class SimpleLandingController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('TemplatesBundle:SimpleLanding')->findByUser($this->getUser()->getId());
+        if( $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+            $em = $this->getDoctrine()->getManager();
+            $entities = $em->getRepository('TemplatesBundle:SimpleLanding')->findByUser($this->getUser()->getId());
 
-        return array(
-            'entities' => $entities,
-        );
+            return array(
+                'entities' => $entities,
+            );
+        } else {
+//            throw new \Exception('please log in');
+            return $this->redirect($this->generateUrl('landing_homepage_default_index'));
+        }
+
     }
     /**
      * Creates a new SimpleLanding entity.
@@ -270,14 +276,13 @@ class SimpleLandingController extends Controller
         $index = $this->renderView('TemplatesBundle:SimpleLanding:show.html.twig', array('entity' => $entity));
         $archive = new ZipArchive();
         $archive->open($this->get('kernel')->getRootDir() . '/../web/zip/' . $entity->getId() . '.zip', ZipArchive::CREATE);
-        $archive->addFromString($entity->getId() . '.php', $index);
-
-        $response = new Response(file_get_contents($archive->filename));
-
+        $archive->addFromString($entity->getId() . '.html', $index);
+        $tempFilename = $archive->filename;
+        $archive->close();
+        $response = new Response(file_get_contents($tempFilename));
         $d = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $entity->getId() . '.zip');
         $response->headers->set('Content-Disposition', $d);
 
-        $archive->close();
 
         return $response;
     }

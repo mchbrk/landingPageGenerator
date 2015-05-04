@@ -3,8 +3,9 @@ landingPageGenerator
 A Symfony project created by Michał Waluk
 <br>
 INFO:<br>
-Quickly generate...<br>
+Quickly generate responsive landing pages.<br>
 BUNDLES:<br>
-https://github.com/FriendsOfSymfony/FOSUserBundle
+https://github.com/FriendsOfSymfony/FOSUserBundle<br>
 CHANGELOG:<br>
+- added zip download<br>
 USAGE:<br>
