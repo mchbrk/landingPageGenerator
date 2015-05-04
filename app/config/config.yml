@@ -34,7 +34,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        ['FOSUserBundle', 'HomepageBundle']
+    bundles:        ['FOSUserBundle', 'HomepageBundle', 'TemplatesBundle']
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

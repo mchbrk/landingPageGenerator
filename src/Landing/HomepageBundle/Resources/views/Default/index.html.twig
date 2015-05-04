@@ -1,7 +1,7 @@
 {% if app.user %}
-{% render url("simplelanding") %}
-    {% else %}
-        {% render url("fos_user_security_login") %}
-        Please <a href="/register">register</a> or login to see the templates.
+    {% render url("simplelanding") %}
+{% else %}
+    {% render url("fos_user_security_login") %}
+    Please <a href="/register">register</a> or login to see the templates.
 {% endif %}
 </div>

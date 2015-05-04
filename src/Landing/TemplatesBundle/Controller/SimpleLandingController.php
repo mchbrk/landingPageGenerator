@@ -269,10 +269,8 @@ class SimpleLandingController extends Controller
     public function downloadTemplateAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         /** @var SimpleLanding $entity */
         $entity = $em->getRepository('TemplatesBundle:SimpleLanding')->find($id);
-
         $index = $this->renderView('TemplatesBundle:SimpleLanding:show.html.twig', array('entity' => $entity));
         $archive = new ZipArchive();
         $archive->open($this->get('kernel')->getRootDir() . '/../web/zip/' . $entity->getId() . '.zip', ZipArchive::CREATE);
@@ -282,8 +280,6 @@ class SimpleLandingController extends Controller
         $response = new Response(file_get_contents($tempFilename));
         $d = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $entity->getId() . '.zip');
         $response->headers->set('Content-Disposition', $d);
-
-
         return $response;
     }
 }
