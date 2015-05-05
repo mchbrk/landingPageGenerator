@@ -3,12 +3,19 @@
 namespace Landing\TemplatesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * CatchEmail
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Landing\TemplatesBundle\Entity\CatchEmailRepository")
+ * @UniqueEntity(
+ *     fields={"emails", "template"},
+ *     errorPath="emails",
+ *     message="Email already exists with that template"
+ * )
+ *
  */
 class CatchEmail
 {
@@ -39,9 +46,13 @@ class CatchEmail
     /**
      * @var string
      *
-     * @ORM\Column(name="timestamp", type="datetime")
+     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
      */
     private $timestamp;
+
+    public function __construct() {
+        $this->timestamp = new \DateTime();
+    }
 
     /**
      * Get id
