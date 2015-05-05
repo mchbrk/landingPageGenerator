@@ -275,12 +275,17 @@ class SimpleLandingController extends Controller
      **/
     public function downloadTemplateAction($id)
     {
+        $submitForm = $this->createForm(new CatchEmailType(), new CatchEmail());
         $em = $this->getDoctrine()->getManager();
         /** @var SimpleLanding $entity */
         $entity = $em->getRepository('TemplatesBundle:SimpleLanding')->find($id);
-        $index = $this->renderView('TemplatesBundle:SimpleLanding:show.html.twig', array('entity' => $entity));
+        $index = $this->renderView('TemplatesBundle:SimpleLanding:show.html.twig', array('entity' => $entity, 'submit_form' => $submitForm->createView()));
+        $dir = $this->get('kernel')->getRootDir() . '/../web/zip';
         $archive = new ZipArchive();
-        $archive->open($this->get('kernel')->getRootDir() . '/../web/zip/' . $entity->getId() . '.zip', ZipArchive::CREATE);
+        if (!file_exists($dir)) {
+            mkdir($dir);
+        }
+        $archive->open($dir . '/' . $entity->getId() . '.zip', ZipArchive::CREATE);
         $archive->addFromString($entity->getId() . '.html', $index);
         $tempFilename = $archive->filename;
         $archive->close();
