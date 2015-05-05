@@ -2,6 +2,8 @@
 
 namespace Landing\TemplatesBundle\Controller;
 
+use Landing\TemplatesBundle\Entity\CatchEmail;
+use Landing\TemplatesBundle\Form\CatchEmailType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -30,7 +32,7 @@ class SimpleLandingController extends Controller
      */
     public function indexAction()
     {
-        if( $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+        if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $em = $this->getDoctrine()->getManager();
             $entities = $em->getRepository('TemplatesBundle:SimpleLanding')->findByUser($this->getUser()->getId());
 
@@ -43,6 +45,7 @@ class SimpleLandingController extends Controller
         }
 
     }
+
     /**
      * Creates a new SimpleLanding entity.
      *
@@ -67,7 +70,7 @@ class SimpleLandingController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -100,11 +103,11 @@ class SimpleLandingController extends Controller
     public function newAction()
     {
         $entity = new SimpleLanding();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -126,9 +129,12 @@ class SimpleLandingController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
+        $submitForm = $this->createForm(new CatchEmailType(), new CatchEmail());
+        //$submitForm->buildView();
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
+            'submit_form' => $submitForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -152,29 +158,28 @@ class SimpleLandingController extends Controller
             throw $this->createNotFoundException('Unable to find SimpleLanding entity.');
         }
         $sameUser = ($this->getUser()->getId() == $entity->getUser()->getId());
-        if (false === ($sameUser))
-        {
-            throw new \Exception('not your template, owner id:' . $entity->getUser()->getId() . ', your id:'.$this->getUser()->getId()
-            . ', comparison result: ' . $sameUser);
+        if (false === ($sameUser)) {
+            throw new \Exception('not your template, owner id:' . $entity->getUser()->getId() . ', your id:' . $this->getUser()->getId()
+                . ', comparison result: ' . $sameUser);
         }
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a SimpleLanding entity.
-    *
-    * @param SimpleLanding $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a SimpleLanding entity.
+     *
+     * @param SimpleLanding $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(SimpleLanding $entity)
     {
         $form = $this->createForm(new SimpleLandingType(), $entity, array(
@@ -186,6 +191,7 @@ class SimpleLandingController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing SimpleLanding entity.
      *
@@ -214,11 +220,12 @@ class SimpleLandingController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a SimpleLanding entity.
      *
@@ -258,9 +265,9 @@ class SimpleLandingController extends Controller
             ->setAction($this->generateUrl('simplelanding_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->getForm();
     }
+
     /**
      * Creates a new SimpleLanding entity.
      *
@@ -281,5 +288,33 @@ class SimpleLandingController extends Controller
         $d = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $entity->getId() . '.zip');
         $response->headers->set('Content-Disposition', $d);
         return $response;
+    }
+
+    /**
+     * @Route("/submit/{id}", name="simplelanding_submit")
+     * @Method("POST")
+     */
+    public function catchAndSaveEmailFromForm(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $template = $em->getRepository('TemplatesBundle:SimpleLanding')->find($id);
+
+        if (!$template) {
+            throw $this->createNotFoundException('Unable to find SimpleLanding entity.');
+        }
+
+        $entity = new CatchEmail();
+        $entity->setTemplate($template);
+
+        $submitForm = $this->createForm(new CatchEmailType(), $entity);
+        $submitForm->handleRequest($request);
+
+        if ($submitForm->isValid()) {
+            $em->persist($entity);
+            $em->flush();
+
+//            return $this->redirect($this->generateUrl('simplelanding_show', array('id' => $entity->getId())));
+            echo 'success';
+        }
     }
 }
